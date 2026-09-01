@@ -1,0 +1,34 @@
+# A2A discovery registry
+# Each agent: name, endpoint, health URL, role. Health URLs are pinged by the
+# scheduled `agent-health` workflow. Keep in sync with agents/*.json cards.
+agents:
+  - name: operit
+    role: orchestrator
+    endpoint: http://localhost:8094
+    health: http://localhost:8094/health
+    note: Android primary assistant
+  - name: jenny
+    role: on-device-executor
+    endpoint: ssh://u0_a482@localhost:8022
+    health: http://localhost:8080/ping
+    note: Termux shell + task executor
+  - name: termux-mcp
+    role: shell-api
+    endpoint: http://127.0.0.1:8080
+    health: http://127.0.0.1:8080/ping
+    note: Termux-MCP HTTP bridge
+  - name: kortix
+    role: workflow-wrapper
+    endpoint: http://localhost:8091
+    health: http://localhost:8091/health
+    note: Kortix MCP wrapper
+  - name: notte
+    role: browser-automation
+    endpoint: https://console.notte.cc
+    health: https://console.notte.cc
+    note: Notte browser automation (cloud)
+  - name: open-terminal
+    role: remote-execution
+    endpoint: http://localhost:8000
+    health: http://localhost:8000/health
+    note: OpenTerminal remote command exec
