@@ -1,0 +1,61 @@
+name: agent-health
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ping agent health endpoints
+        id: ping
+        env:
+          ENDPOINTS: |
+            http://localhost:8094/health
+            http://127.0.0.1:8080/ping
+            http://localhost:8091/health
+            http://localhost:8000/health
+        run: |
+          # Local endpoints are unreachable from GitHub-hosted runners by design;
+          # this workflow is the wiring/pattern to adapt for self-hosted runners
+          # or public agent endpoints. Uncomment when a self-hosted runner is wired.
+          # while read -r url; do
+          #   [ -z "$url" ] && continue
+          #   code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url" || echo 000)
+          #   echo "  $url -> $code"
+          # done <<< "$ENDPOINTS"
+          echo "Self-hosted runner wiring required to reach local agent endpoints."
+
+      - name: Validate registry YAML
+        run: |
+          python3 - <<'PY'
+          import yaml
+          try:
+              with open('a2a/registry.yaml') as f:
+                  reg = yaml.safe_load(f)
+              assert reg and reg.get('agents'), "registry.yaml empty or malformed"
+              print(f"registry OK: {len(reg['agents'])} agents registered")
+          except Exception as e:
+              print(f"::error::{e}")
+              raise
+          PY
+
+      - name: Validate agent cards
+        run: |
+          python3 - <<'PY'
+          import json, glob
+          cards = glob.glob('a2a/agents/*.json')
+          for c in cards:
+              d = json.load(open(c))
+              assert d.get('agent',{}).get('name'), f"missing agent.name in {c}"
+              assert d['agent'].get('skills'), f"missing agent.skills in {c}"
+              print(f"  OK {c}")
+          print(f"{len(cards)} agent card(s) validated")
+          PY
