@@ -1,0 +1,22 @@
+{
+  "a2a": "0.1",
+  "agent": {
+    "name": "example-agent",
+    "description": "Short description of what this agent does.",
+    "url": "https://agent.example.com",
+    "endpoint": "/",
+    "health": "/health",
+    "auth": { "type": "bearer", "env": "AGENT_TOKEN" },
+    "skills": [
+      {
+        "id": "run_shell",
+        "name": "Execute shell command",
+        "description": "Run an approved command and stream output."
+      }
+    ],
+    "capabilities": ["shell", "browser", "vision", "voice", "scheduling"],
+    "owner": "muffy86",
+    "org": "Muffy1",
+    "tags": ["android", "self-hosted"]
+  }
+}
