@@ -1,0 +1,23 @@
+{
+  "name": "Muffy1 Agent Gateway",
+  "url": "https://github.com/Muffy1",
+  "hook_attributes": {
+    "url": "https://example.com/github/hook"
+  },
+  "redirect_url": "https://github.com/Muffy1",
+  "public": false,
+  "default_permissions": {
+    "issues": "write",
+    "contents": "write",
+    "pull_requests": "write",
+    "checks": "read",
+    "workflows": "write",
+    "metadata": "read"
+  },
+  "default_events": [
+    "issues",
+    "pull_request",
+    "push",
+    "workflow_run"
+  ]
+}
