@@ -35,6 +35,7 @@ jobs:
 
       - name: Validate registry YAML
         run: |
+          pip install --quiet pyyaml
           python3 - <<'PY'
           import yaml
           try:
